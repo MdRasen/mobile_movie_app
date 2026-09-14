@@ -40,7 +40,7 @@ const TabsLayout = () => {
           borderRadius: 50,
           marginHorizontal: 20,
           marginBottom: 36,
-          height: 50,
+          height: 48,
           position: "absolute",
           overflow: "hidden",
           borderWidth: 1,
