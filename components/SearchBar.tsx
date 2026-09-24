@@ -3,30 +3,39 @@ import { icons } from "../constants/icons";
 
 interface Props {
   placeholder: string;
+  value: string;
+  onChangeText: (text: string) => void;
   onPress?: () => void;
 }
 
-const SearchBar = ({ placeholder, onPress }: Props) => {
+const SearchBar = ({ placeholder, value, onChangeText, onPress }: Props) => {
   return (
-    // Wrapped in TouchableOpacity to make the whole bar clickable
     <TouchableOpacity
       onPress={onPress}
-      activeOpacity={0.7}
-      className="flex-row items-center bg-dark-200 rounded-full px-5 py-4"
+      activeOpacity={onPress ? 0.7 : 1}
+      disabled={!onPress}
+      className="flex-row items-center px-5 py-4"
+      style={{
+        backgroundColor: "rgba(18, 18, 37, 0.6)",
+        borderRadius: 9999,
+      }}
     >
       <Image
         source={icons.search}
-        className="size-5"
+        className="w-5 h-5"
         resizeMode="contain"
         tintColor="#ab8bff"
       />
       <TextInput
         placeholder={placeholder}
-        value=""
-        onChangeText={() => {}}
+        value={value}
+        onChangeText={onChangeText}
         placeholderTextColor="#a8b5db"
-        className="flex-1 ml-2 text-white"
-        pointerEvents={onPress ? "none" : "auto"} // Disables input focus if it's acting as a button
+        className="flex-1 pl-3 text-white text-base"
+        editable={!onPress}
+        pointerEvents={onPress ? "none" : "auto"}
+        underlineColorAndroid="transparent"
+        style={{ outlineStyle: "none" } as any}
       />
     </TouchableOpacity>
   );

@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  ScrollView,
   Text,
   useWindowDimensions,
   View,
@@ -38,56 +37,60 @@ export default function Index() {
         resizeMode="stretch"
       />
 
-      <ScrollView
-        className="flex-1 px-5"
+      <FlatList
+        data={moviesLoading || moviesError ? [] : movies}
+        renderItem={({ item }) => <MovieCard {...item} />}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={3}
+        className="px-5"
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          minHeight: "100%",
-          paddingBottom: 10,
+        columnWrapperStyle={{
+          justifyContent: "flex-start",
+          gap: 20,
+          paddingRight: 5,
+          marginBottom: 10,
         }}
-      >
-        <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5 mx-auto" />
-
-        <View className="flex-1 mt-5">
-          <SearchBar
-            onPress={() => router.push("/search")}
-            placeholder="Search movies, TV shows..."
-          />
-
-          {moviesLoading ? (
-            <ActivityIndicator
-              size="large"
-              color="#ab8bff"
-              className="mt-10 self-center"
+        contentContainerStyle={{
+          paddingBottom: 120,
+        }}
+        ListHeaderComponent={
+          <>
+            <Image
+              source={icons.logo}
+              className="w-12 h-10 mt-20 mb-5 mx-auto"
             />
-          ) : moviesError ? (
-            <Text className="text-red-500 mt-5 text-center font-bold">
-              Error: {moviesError?.message}
-            </Text>
-          ) : (
-            <View className="mt-5">
-              <Text className="text-lg text-white font-bold mb-3">
-                Latest Movies
-              </Text>
 
-              <FlatList
-                data={movies}
-                renderItem={({ item }) => <MovieCard {...item} />}
-                keyExtractor={(item) => item.id.toString()}
-                numColumns={3}
-                columnWrapperStyle={{
-                  justifyContent: "flex-start",
-                  gap: 20,
-                  paddingRight: 5,
-                  marginBottom: 10,
-                }}
-                className="mt-2 pb-32"
-                scrollEnabled={false}
+            <View className="mt-5 mb-5">
+              <SearchBar
+                onPress={() => router.push("/search")}
+                placeholder="Search movies, TV shows..."
+                value=""
+                onChangeText={() => {}}
               />
             </View>
-          )}
-        </View>
-      </ScrollView>
+
+            {moviesLoading && (
+              <ActivityIndicator
+                size="large"
+                color="#ab8bff"
+                className="mt-10 self-center"
+              />
+            )}
+
+            {moviesError && (
+              <Text className="text-red-500 mt-5 text-center font-bold">
+                Error: {moviesError?.message}
+              </Text>
+            )}
+
+            {!moviesLoading && !moviesError && movies && movies.length > 0 && (
+              <Text className="text-lg text-white font-bold mb-3 mt-2">
+                Latest Movies
+              </Text>
+            )}
+          </>
+        }
+      />
     </View>
   );
 }
